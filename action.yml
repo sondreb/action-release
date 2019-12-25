@@ -1,0 +1,27 @@
+name: sondreb/action-release
+description: |
+  GitHub Release Action
+author: Sondre Bjellås
+branding:
+  icon: box
+  color: gray-dark
+inputs:
+  token:
+    description: 'The GitHub token.'
+    required: true
+    default: ''
+  tag:
+    description: 'An optional tag for the release. If this is omitted the git ref will be used (if it is a tag).'
+    default: ''
+  name:
+    required: true
+  draft:
+    description: "Optionally marks this release as a draft release. Set to true to enable."
+    default: false
+  prerelease:
+    default: false
+  files:
+    default: ""
+runs:
+  using: node12
+  main: action.js
