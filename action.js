@@ -39,15 +39,20 @@ const github = require('@actions/github');
 
             console.log('The tag did not exists, creating a new release.');
 
-            release = await api.repos.createRelease({
+            var releaseOptions = {
                 ...github.context.repo,
                 tag_name: tag,
-                target_commitish: github.context.sha,
+                target_commitish: 'master',
+                //target_commitish: github.context.sha,
                 name,
                 body,
                 prerelease: prerelease,
                 draft: draft
-            });
+            };
+
+            console.log(releaseOptions);
+
+            release = await api.repos.createRelease();
         }
 
         // Go through all the specified files and upload to the release.
