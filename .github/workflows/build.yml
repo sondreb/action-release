@@ -46,7 +46,7 @@ jobs:
       with:
         verbose: true
         token: ${{ secrets.GITHUB_TOKEN }}
-        files: "action.js, README.md"
+        files: "action.js;README.md"
         draft: false
         prerelease: false
         #body: ${{outputs.changelog.}}

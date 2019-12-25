@@ -5,6 +5,8 @@ require('child_process')
     );
 
 const fs = require('fs');
+const path = require('path');
+const mime = require('mime');
 const core = require('@actions/core');
 const github = require('@actions/github');
 
@@ -17,13 +19,22 @@ const github = require('@actions/github');
         const verbose = core.getInput('verbose');
         const draft = core.getInput('draft') == 'true';
         const prerelease = core.getInput('prerelease') == 'true';
-        const files = core.getInput('files').split(' ,');
+        const files = core.getInput('files').split(';');
 
         let release = null;
 
         function log(name, text) {
             if (verbose) {
                 console.log(name + ':', text);
+            }
+        }
+
+        function getFile(filePath) {
+            return {
+                name: path.basename(filePath),
+                mime: mime.getType(filePath) || 'application/octet-stream',
+                size: fs.lstatSync(filePath).size,
+                file: fs.readFileSync(filePath)
             }
         }
 
@@ -87,23 +98,30 @@ const github = require('@actions/github');
             release = await api.repos.createRelease(releaseOptions);
         }
 
-        // Go through all the specified files and upload to the release.
-        for (const source of files) {
 
-            log('source', source);
-            const data = fs.readFileSync(source);
-            log('data', data);
+        function upload() {
+            var file = files.pop();
 
-            api.repos.uploadReleaseAsset({
+            if (!file) {
+                return;
+            }
+
+            var fileInfo = getFile(file);
+
+            return api.repos.uploadReleaseAsset({
                 url: release.data.upload_url,
                 headers: {
-                    ['content-type']: 'raw',
-                    ['content-length']: data.length
+                    ['content-type']: fileInfo.mime,
+                    ['content-length']: fileInfo.size
                 },
-                name: source,
-                file: data
+                name: fileInfo.name,
+                file: fileInfo.file
+            }).then(() => {
+                upload();
             });
         }
+
+        upload();
     } catch (error) {
         console.error(error);
         core.setFailed(error.message);
