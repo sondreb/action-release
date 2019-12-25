@@ -23,6 +23,8 @@ inputs:
   files:
     required: true
     default: ''
+  body:
+    default: ''
 runs:
   using: node12
   main: action.js

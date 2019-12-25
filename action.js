@@ -12,6 +12,7 @@ const github = require('@actions/github');
         const api = new github.GitHub(core.getInput('token'));
         const tag = core.getInput('tag');
         const name = core.getInput('name');
+        const body = core.getInput('body');
         const draft = core.getInput('draft') == 'true';
         const prerelease = core.getInput('prerelease') == 'true';
         const files = core.getInput('files').split(' ').map(asset => asset.split(':'));
@@ -38,7 +39,7 @@ const github = require('@actions/github');
                 tag_name: tag,
                 target_commitish: github.context.sha,
                 name,
-                body: 'Release Notes should be gathered using CHANGELOG.md',
+                body,
                 prerelease: prerelease,
                 draft: draft
             });
