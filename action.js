@@ -23,9 +23,11 @@ const github = require('@actions/github');
 
         function log(text) {
             if (verbose) {
-                console.log('The tag did not exists, creating a new release.');
+                console.log(text);
             }
         }
+
+        log(github.context);
 
         // First let us try to get the release.
         try {
