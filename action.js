@@ -49,7 +49,7 @@ const github = require('@actions/github');
             // If this has been published, we'll create a new tag.
             if (draft && !release.data.draft) {
                 release = null;
-                log('Exists', 'The existing release was not draft, creating new draft...');
+                log('Exists', 'The existing release was not draft.');
             }
             else {
                 // We cannot update assets on existing releases, so until a future update, we'll ignore updating
@@ -65,29 +65,37 @@ const github = require('@actions/github');
         }
 
         // Get releases if the first release get was not satisfactory.
-        try {
-            var releases = await api.repos.listReleases({
-                ...github.context.repo
-            });
+        if (!release) {
+            try {
+                var releases = await api.repos.listReleases({
+                    ...github.context.repo
+                });
 
-            log('releases', releases);
+                log('releases', releases);
 
-            for (const r in releases.data) {
-                if (r.tag_name == tag && r.draft == draft && r.prerelease == prerelease) {
-                    release = r;
-                    log('Release', 'Found existing release based on searching.');
-                    break;
+                for (const r in releases.data) {
+
+                    console.log('R:', r);
+
+                    console.log('r.tag_name == tag', r.tag_name == tag);
+                    console.log('r.draft == draft', r.draft == draft);
+                    console.log('r.prerelease == prerelease', r.prerelease == prerelease);
+
+                    if (r.tag_name == tag && r.draft == draft && r.prerelease == prerelease) {
+                        release = r;
+                        log('Release', 'Found existing release based on searching.');
+                        break;
+                    }
+                }
+            }
+            catch (error) {
+                console.error('Failed to get releases', error);
+
+                if (error.name != 'HttpError' || error.status != 404) {
+                    throw error;
                 }
             }
         }
-        catch (error) {
-            console.error('Failed to get releases', error);
-
-            if (error.name != 'HttpError' || error.status != 404) {
-                throw error;
-            }
-        }
-
 
         // Create a release if it doesn't already exists.
         if (!release) {
@@ -106,7 +114,6 @@ const github = require('@actions/github');
 
             release = await api.repos.createRelease(releaseOptions);
         }
-
 
         function upload() {
             var file = files.pop();
