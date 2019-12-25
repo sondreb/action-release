@@ -88,14 +88,10 @@ const github = require('@actions/github');
         }
 
         // Go through all the specified files and upload to the release.
-        for (const [source, target, type] of files) {
+        for (const source of files) {
 
             log('source', source);
-            log('target', target);
-            log('type', type);
-
             const data = fs.readFileSync(source);
-
             log('data', data);
 
             api.repos.uploadReleaseAsset({
@@ -104,7 +100,7 @@ const github = require('@actions/github');
                     ['content-type']: 'raw',
                     ['content-length']: data.length
                 },
-                name: target,
+                name: source,
                 file: data
             });
         }
