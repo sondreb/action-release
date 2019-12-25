@@ -21,7 +21,8 @@ inputs:
   prerelease:
     default: false
   files:
-    default: ""
+    required: true
+    default: ''
 runs:
   using: node12
   main: action.js

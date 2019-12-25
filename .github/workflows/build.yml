@@ -41,7 +41,7 @@ jobs:
       uses: sondreb/action-release@master
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        artifacts: "action.js"
+        files: "action.js"
         draft: true
         prerelease: true
         name: "Draft Release (Release {{env.VERSION}})"
