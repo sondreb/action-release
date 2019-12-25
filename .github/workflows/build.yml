@@ -1,0 +1,42 @@
+name: Build
+
+on: 
+  push:
+    branches:
+      - master
+
+jobs:
+  
+  buildTestRelease:
+
+    strategy:
+      matrix:
+        os: [ windows-latest, ubuntu-latest, macos-latest ]
+        node_version: [12.x]
+        dotnet_version: ['2.1.607']
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+    
+    env:
+      PROJECT_NAME: 'action-release'
+
+    steps:
+
+    - uses: actions/checkout@v1
+      name: Checkout
+
+    - name: Setup Node.js (${{ matrix.node_version }})
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node_version }}
+
+    - name: Release
+      uses: sondreb/action-release@master
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        artifacts: "action.js"
+        draft: true
+        prerelease: true
+        name: "Draft Release"
+        tag: v0.0.1
