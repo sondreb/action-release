@@ -16,23 +16,10 @@ const github = require('@actions/github');
         const tag = core.getInput('tag');
         const name = core.getInput('name');
         const body = core.getInput('body');
-        const verbose = core.getInput('verbose');
-        const draft = core.getInput('draft');
-        const draft2 = core.getInput('draft2');
-        const prerelease = core.getInput('prerelease');
+        const verbose = core.getInput('verbose') == 'true'; // input is always string, not boolean.
+        const draft = core.getInput('draft') == 'true';
+        const prerelease = core.getInput('prerelease') == 'true';
         const files = core.getInput('files').split(';');
-
-        console.log('draft2:');
-        console.log(draft2);
-
-        if (draft == null) {
-            draft = false;
-        }
-
-        if (prerelease == null) {
-            prerelease = false;
-        }
-
         let release = null;
 
         function log(name, text) {
@@ -76,7 +63,7 @@ const github = require('@actions/github');
             // If this has been published, we'll create a new tag.
             if (draft && !release.data.draft) {
                 release = null;
-                log('The existing release was not draft, creating new draft...');
+                log('Exists', 'The existing release was not draft, creating new draft...');
             }
             else {
                 // We cannot update assets on existing releases, so until a future update, we'll ignore updating
@@ -120,8 +107,8 @@ const github = require('@actions/github');
                 //target_commitish: github.context.sha,
                 name,
                 body,
-                prerelease: prerelease.toString(),
-                draft: draft.toString()
+                prerelease: prerelease,
+                draft: draft
             };
 
             log('releaseOptions', releaseOptions);
