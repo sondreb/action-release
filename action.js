@@ -2,7 +2,8 @@ require('child_process')
     .execSync(
         'npm install @actions/core @actions/github conventional-changelog-cli',
         { cwd: __dirname }
-    );  
+    );
+
 const fs = require('fs');
 const core = require('@actions/core');
 const github = require('@actions/github');
@@ -13,11 +14,18 @@ const github = require('@actions/github');
         const tag = core.getInput('tag');
         const name = core.getInput('name');
         const body = core.getInput('body');
+        const verbose = core.getInput('verbose');
         const draft = core.getInput('draft') == 'true';
         const prerelease = core.getInput('prerelease') == 'true';
         const files = core.getInput('files').split(' ').map(asset => asset.split(':'));
 
         let release = null;
+
+        function log(text) {
+            if (verbose) {
+                console.log('The tag did not exists, creating a new release.');
+            }
+        }
 
         // First let us try to get the release.
         try {
@@ -36,21 +44,18 @@ const github = require('@actions/github');
 
         // Create a release if it doesn't already exists.
         if (!release) {
-
-            console.log('The tag did not exists, creating a new release.');
-
             var releaseOptions = {
                 ...github.context.repo,
                 tag_name: tag,
-                target_commitish: 'master',
-                //target_commitish: github.context.sha,
+                //target_commitish: 'master',
+                target_commitish: github.context.sha,
                 name,
                 body,
                 prerelease: prerelease,
                 draft: draft
             };
 
-            console.log(releaseOptions);
+            log(releaseOptions);
 
             release = await api.repos.createRelease();
         }
@@ -58,14 +63,13 @@ const github = require('@actions/github');
         // Go through all the specified files and upload to the release.
         for (const [source, target, type] of files) {
 
-            console.log('FILE:');
-            console.log(source);
-            console.log(target);
-            console.log(type);
+            log(source);
+            log(target);
+            log(type);
 
             const data = fs.readFileSync(source);
 
-            console.log(data);
+            log(data);
 
             api.repos.uploadReleaseAsset({
                 url: release.data.upload_url,
@@ -81,5 +85,4 @@ const github = require('@actions/github');
         console.error(error);
         core.setFailed(error.message);
     }
-
 })();
