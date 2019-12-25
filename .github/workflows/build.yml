@@ -32,6 +32,11 @@ jobs:
       with:
         node-version: ${{ matrix.node_version }}
 
+    - name: Version
+      id: setversion
+      run: |
+        echo "::set-env name=VERSION::$(npm run version --silent)"
+
     - name: Release
       uses: sondreb/action-release@master
       with:
@@ -39,5 +44,5 @@ jobs:
         artifacts: "action.js"
         draft: true
         prerelease: true
-        name: "Draft Release"
-        tag: v0.0.1
+        name: "Draft Release (Release {{env.VERSION}})"
+        tag: v${{env.VERSION}}

@@ -4,7 +4,10 @@
     "private": true,
     "description": "GitHub Action: GitHub Release Action",
     "main": "action.js",
-    "scripts": {},
+    "scripts": {
+        "version": "node -p \"require('./package.json').version\"",
+        "changelog": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md"
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/sondreb/action-release.git"
@@ -18,8 +21,10 @@
     "author": "Sondre Bjellås",
     "license": "MIT",
     "dependencies": {
-        "@actions/core": "1.2.0",
-        "@actions/github": "2.0.0"
+        "@actions/core": "^1.2.0",
+        "@actions/github": "^2.0.0"
     },
-    "devDependencies": {}
+    "devDependencies": {
+        "conventional-changelog-cli": "^2.0.31"
+    }
 }

@@ -38,7 +38,7 @@ const github = require('@actions/github');
                 tag_name: tag,
                 target_commitish: github.context.sha,
                 name,
-                body,
+                body: 'Release Notes should be gathered using CHANGELOG.md',
                 prerelease: prerelease,
                 draft: draft
             });
