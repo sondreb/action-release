@@ -1,6 +1,6 @@
 {
     "name": "action-release",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "private": true,
     "description": "GitHub Action: GitHub Release Action",
     "main": "action.js",
@@ -22,7 +22,8 @@
     "license": "MIT",
     "dependencies": {
         "@actions/core": "^1.2.0",
-        "@actions/github": "^2.0.0"
+        "@actions/github": "^2.0.0",
+        "changelog-parser": "^2.8.0"
     },
     "devDependencies": {
         "conventional-changelog-cli": "^2.0.31"
