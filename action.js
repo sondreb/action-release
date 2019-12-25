@@ -27,13 +27,15 @@ const github = require('@actions/github');
             }
         }
 
-        log(github.context);
+        //log(github.context);
+        log(github);
 
         // First let us try to get the release.
         try {
             release = await api.repos.getReleaseByTag({
                 ...github.context.repo,
-                tag: tag
+                tag: tag,
+                owner: github.context.actor
             });
 
             console.log('The tag exists.');
