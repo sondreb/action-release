@@ -30,6 +30,23 @@ const github = require('@actions/github');
         //log(github.context);
         log('github', github);
 
+
+        // First let us try to get the release.
+        try {
+            var releases  = await api.repos.listReleases({
+                ...github.context.repo
+            });
+
+            log('releases', releases);
+        }
+        catch (error) {
+            console.error('Failed to get releases', error);
+            
+            if (error.name != 'HttpError' || error.status != 404) {
+                throw error;
+            }
+        }
+
         // First let us try to get the release.
         try {
             release = await api.repos.getReleaseByTag({
