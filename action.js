@@ -54,10 +54,13 @@ const github = require('@actions/github');
             console.log(type);
 
             const data = fs.readFileSync(source);
+
+            console.log(data);
+
             api.repos.uploadReleaseAsset({
                 url: release.data.upload_url,
                 headers: {
-                    ['content-type']: type,
+                    ['content-type']: 'raw',
                     ['content-length']: data.length
                 },
                 name: target,
