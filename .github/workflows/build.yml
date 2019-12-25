@@ -49,5 +49,5 @@ jobs:
         draft: true
         prerelease: true
         #body: ${{outputs.changelog.}}
-        name: "Draft Release (Release {{env.VERSION}})"
+        name: "Draft Release (Release ${{env.VERSION}})"
         tag: v${{env.VERSION}}
