@@ -16,11 +16,20 @@ const github = require('@actions/github');
         const prerelease = core.getInput('prerelease') == 'true';
         const files = core.getInput('files').split(' ').map(asset => asset.split(':'));
 
+        let release = null;
+
         // First let us try to get the release.
-        const release = await api.repos.getReleaseByTag({
-            ...github.context.repo,
-            tag: tag
-        });
+        try {
+            release = await api.repos.getReleaseByTag({
+                ...github.context.repo,
+                tag: tag
+            });
+        }
+        catch (error) {
+            if (error.name != 'HttpError' || error.status != 404) {
+                throw error;
+            }
+        }
 
         // Create a release if it doesn't already exists.
         if (!release) {
@@ -34,7 +43,7 @@ const github = require('@actions/github');
                 draft: draft
             });
         }
-        
+
         // Go through all the specified files and upload to the release.
         for (const [source, target, type] of files) {
             const data = fs.readFileSync(source);
