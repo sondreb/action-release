@@ -12,7 +12,6 @@ Use this Action if you have the following workflow:
 - When the draft is ready for release, it can be published as prerelease/release manually. It will no longer be updateable.
 - On next commit, another draft release will be created.
 
-
 ## Usage
 
 Here is an example on how to use this Action:
@@ -28,6 +27,10 @@ Here is an example on how to use this Action:
         name: "Draft Release"
         tag: v0.0.1
 ```
+
+### Notes
+
+The "prerelease" parameter is not used to allow you to update a published prerelease, but simply mark it by default with prerelease.
 
 ## License
 

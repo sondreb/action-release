@@ -37,9 +37,6 @@ const github = require('@actions/github');
             }
         }
 
-        //log(github.context);
-        //log('github', github);
-
         // First let us try to get the release.
         try {
             release = await api.repos.getReleaseByTag({
@@ -48,17 +45,6 @@ const github = require('@actions/github');
             });
 
             log('Tag exists', release);
-        }
-        catch (error) {
-            if (error.name != 'HttpError' || error.status != 404) {
-                throw error;
-            }
-        }
-
-        if (release) {
-
-            console.log('release.date:');
-            console.log(release.data);
 
             // If this has been published, we'll create a new tag.
             if (draft && !release.data.draft) {
@@ -72,6 +58,11 @@ const github = require('@actions/github');
                 return;
             }
         }
+        catch (error) {
+            if (error.name != 'HttpError' || error.status != 404) {
+                throw error;
+            }
+        }
 
         // Get releases if the first release get was not satisfactory.
         try {
@@ -81,7 +72,7 @@ const github = require('@actions/github');
 
             log('releases', releases);
 
-            for (const r in releases) {
+            for (const r in releases.data) {
                 if (r.tag_name == tag && r.draft == draft && r.prerelease == prerelease) {
                     release = r;
                     log('Release', 'Found existing release based on searching.');
