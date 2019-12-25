@@ -25,6 +25,8 @@ const github = require('@actions/github');
                 ...github.context.repo,
                 tag: tag
             });
+
+            console.log('The tag exists.');
         }
         catch (error) {
             if (error.name != 'HttpError' || error.status != 404) {
@@ -34,6 +36,9 @@ const github = require('@actions/github');
 
         // Create a release if it doesn't already exists.
         if (!release) {
+
+            console.log('The tag did not exists, creating a new release.');
+
             release = await api.repos.createRelease({
                 ...github.context.repo,
                 tag_name: tag,
