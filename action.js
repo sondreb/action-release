@@ -17,8 +17,8 @@ const github = require('@actions/github');
         const name = core.getInput('name');
         const body = core.getInput('body');
         const verbose = core.getInput('verbose');
-        const draft = core.getInput('draft') == 'true';
-        const prerelease = core.getInput('prerelease') == 'true';
+        const draft = core.getInput('draft');
+        const prerelease = core.getInput('prerelease');
         const files = core.getInput('files').split(';');
 
         let release = null;
@@ -57,6 +57,10 @@ const github = require('@actions/github');
         }
 
         if (release) {
+
+            console.log('release.date:');
+            console.log(release.data);
+
             // If this has been published, we'll create a new tag.
             if (draft && !release.data.draft) {
                 release = null;

@@ -47,8 +47,8 @@ jobs:
         verbose: true
         token: ${{ secrets.GITHUB_TOKEN }}
         files: "action.js;README.md"
-        draft: false
-        prerelease: false
+        draft: true
+        prerelease: true
         body: 'A little test'
         #body: ${{outputs.changelog.}}
         name: "Draft Release (Release ${{env.VERSION}})"
