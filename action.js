@@ -18,8 +18,20 @@ const github = require('@actions/github');
         const body = core.getInput('body');
         const verbose = core.getInput('verbose');
         const draft = core.getInput('draft');
+        const draft2 = core.getInput('draft2');
         const prerelease = core.getInput('prerelease');
         const files = core.getInput('files').split(';');
+
+        console.log('draft2:');
+        console.log(draft2);
+
+        if (draft == null) {
+            draft = false;
+        }
+
+        if (prerelease == null) {
+            prerelease = false;
+        }
 
         let release = null;
 
@@ -108,8 +120,8 @@ const github = require('@actions/github');
                 //target_commitish: github.context.sha,
                 name,
                 body,
-                prerelease: prerelease,
-                draft: draft
+                prerelease: prerelease.toString(),
+                draft: draft.toString()
             };
 
             log('releaseOptions', releaseOptions);
