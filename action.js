@@ -34,8 +34,7 @@ const github = require('@actions/github');
         try {
             release = await api.repos.getReleaseByTag({
                 ...github.context.repo,
-                tag: tag,
-                owner: github.context.actor
+                tag: tag
             });
 
             console.log('The tag exists.');
@@ -56,7 +55,8 @@ const github = require('@actions/github');
                 name,
                 body,
                 prerelease: prerelease,
-                draft: draft
+                draft: draft,
+                owner: github.context.actor
             };
 
             log(releaseOptions);
