@@ -55,13 +55,12 @@ const github = require('@actions/github');
                 name,
                 body,
                 prerelease: prerelease,
-                draft: draft,
-                owner: github.context.actor
+                draft: draft
             };
 
             log(releaseOptions);
 
-            release = await api.repos.createRelease();
+            release = await api.repos.createRelease(releaseOptions);
         }
 
         // Go through all the specified files and upload to the release.
