@@ -36,10 +36,10 @@ jobs:
       run: |
         echo "::set-env name=VERSION::$(npm run version --silent)"
 
-    - name: Changelog
-      id: changelog
-      run: |
-        npm run changelog
+    # - name: Changelog
+    #   id: changelog
+    #   run: |
+    #     npm run changelog
 
     - name: Release
       uses: sondreb/action-release@master
