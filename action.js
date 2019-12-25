@@ -46,6 +46,12 @@ const github = require('@actions/github');
 
         // Go through all the specified files and upload to the release.
         for (const [source, target, type] of files) {
+
+            console.log('FILE:');
+            console.log(source);
+            console.log(target);
+            console.log(type);
+
             const data = fs.readFileSync(source);
             api.repos.uploadReleaseAsset({
                 url: release.data.upload_url,
