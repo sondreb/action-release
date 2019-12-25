@@ -49,12 +49,6 @@ const github = require('@actions/github');
             });
 
             log('Tag exists', release);
-
-            // If this has been published, we'll create a new tag.
-            if (draft && release.data.draft) {
-                release = null;
-                log('The existing release was not draft, creating new draft...');
-            }
         }
         catch (error) {
             if (error.name != 'HttpError' || error.status != 404) {
@@ -63,7 +57,17 @@ const github = require('@actions/github');
         }
 
         if (release) {
-
+            // If this has been published, we'll create a new tag.
+            if (draft && !release.data.draft) {
+                release = null;
+                log('The existing release was not draft, creating new draft...');
+            }
+            else {
+                // We cannot update assets on existing releases, so until a future update, we'll ignore updating
+                // releases that are published.
+                console.log('Draft parameter is set to false and there is an existing release. Skipping any updates to release.');
+                return;
+            }
         }
 
         // Get releases if the first release get was not satisfactory.
