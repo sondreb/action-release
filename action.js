@@ -30,18 +30,25 @@ const github = require('@actions/github');
         //log(github.context);
         log('github', github);
 
-
         // First let us try to get the release.
         try {
-            var releases  = await api.repos.listReleases({
+            var releases = await api.repos.listReleases({
                 ...github.context.repo
             });
 
             log('releases', releases);
+
+            for (const r in releases) {
+                if (r.tag_name == tag && r.draft == draft && r.prerelease == prerelease) {
+                    release = r;
+                    log('Release', 'Found existing release based on searching.');
+                    break;
+                }
+            }
         }
         catch (error) {
             console.error('Failed to get releases', error);
-            
+
             if (error.name != 'HttpError' || error.status != 404) {
                 throw error;
             }
@@ -67,8 +74,8 @@ const github = require('@actions/github');
             var releaseOptions = {
                 ...github.context.repo,
                 tag_name: tag,
-                //target_commitish: 'master',
-                target_commitish: github.context.sha,
+                target_commitish: 'master',
+                //target_commitish: github.context.sha,
                 name,
                 body,
                 prerelease: prerelease,
