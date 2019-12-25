@@ -49,6 +49,7 @@ jobs:
         files: "action.js;README.md"
         draft: false
         prerelease: false
+        body: 'A little test'
         #body: ${{outputs.changelog.}}
         name: "Draft Release (Release ${{env.VERSION}})"
         tag: v${{env.VERSION}}
