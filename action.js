@@ -21,14 +21,14 @@ const github = require('@actions/github');
 
         let release = null;
 
-        function log(text) {
+        function log(name, text) {
             if (verbose) {
-                console.log(text);
+                console.log(name + ':', text);
             }
         }
 
         //log(github.context);
-        log(github);
+        log('github', github);
 
         // First let us try to get the release.
         try {
@@ -37,7 +37,7 @@ const github = require('@actions/github');
                 tag: tag
             });
 
-            console.log('The tag exists.');
+            log('tag', 'The tag exists.');
         }
         catch (error) {
             if (error.name != 'HttpError' || error.status != 404) {
@@ -58,7 +58,7 @@ const github = require('@actions/github');
                 draft: draft
             };
 
-            log(releaseOptions);
+            log('releaseOptions', releaseOptions);
 
             release = await api.repos.createRelease(releaseOptions);
         }
@@ -66,13 +66,13 @@ const github = require('@actions/github');
         // Go through all the specified files and upload to the release.
         for (const [source, target, type] of files) {
 
-            log(source);
-            log(target);
-            log(type);
+            log('source', source);
+            log('target', target);
+            log('type', type);
 
             const data = fs.readFileSync(source);
 
-            log(data);
+            log('data', data);
 
             api.repos.uploadReleaseAsset({
                 url: release.data.upload_url,
