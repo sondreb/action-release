@@ -17,7 +17,7 @@ const github = require('@actions/github');
         const verbose = core.getInput('verbose');
         const draft = core.getInput('draft') == 'true';
         const prerelease = core.getInput('prerelease') == 'true';
-        const files = core.getInput('files').split(' ').map(asset => asset.split(':'));
+        const files = core.getInput('files').split(' ,');
 
         let release = null;
 
