@@ -1,6 +1,6 @@
 require('child_process')
     .execSync(
-        'npm install @actions/core @actions/github',
+        'npm install @actions/core @actions/github conventional-changelog-cli',
         { cwd: __dirname }
     );  
 const fs = require('fs');
