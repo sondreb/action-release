@@ -39,9 +39,34 @@ const github = require('@actions/github');
         }
 
         //log(github.context);
-        log('github', github);
+        //log('github', github);
 
         // First let us try to get the release.
+        try {
+            release = await api.repos.getReleaseByTag({
+                ...github.context.repo,
+                tag: tag
+            });
+
+            log('Tag exists', release);
+
+            // If this has been published, we'll create a new tag.
+            if (draft && release.data.draft) {
+                release = null;
+                log('The existing release was not draft, creating new draft...');
+            }
+        }
+        catch (error) {
+            if (error.name != 'HttpError' || error.status != 404) {
+                throw error;
+            }
+        }
+
+        if (release) {
+
+        }
+
+        // Get releases if the first release get was not satisfactory.
         try {
             var releases = await api.repos.listReleases({
                 ...github.context.repo
@@ -65,20 +90,6 @@ const github = require('@actions/github');
             }
         }
 
-        // First let us try to get the release.
-        try {
-            release = await api.repos.getReleaseByTag({
-                ...github.context.repo,
-                tag: tag
-            });
-
-            log('tag', 'The tag exists.');
-        }
-        catch (error) {
-            if (error.name != 'HttpError' || error.status != 404) {
-                throw error;
-            }
-        }
 
         // Create a release if it doesn't already exists.
         if (!release) {
