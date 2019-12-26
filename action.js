@@ -92,6 +92,9 @@ const github = require('@actions/github');
             }
         }
 
+        // Indicate if the release was created, or merely updated.
+        let created = false;
+
         // Create a release if it doesn't already exists.
         if (!release) {
             var releaseOptions = {
@@ -110,6 +113,8 @@ const github = require('@actions/github');
             const result = await api.repos.createRelease(releaseOptions);
             log('CREATED RELEASE, does this contain .data?', result);
             release = result.data;
+
+            created = true;
         }
         else
         {
@@ -135,12 +140,35 @@ const github = require('@actions/github');
 
         function upload() {
             var file = files.pop();
+            var fileInfo = getFile(file);
 
             if (!file) {
                 return;
             }
 
-            var fileInfo = getFile(file);
+            // If not a new release, we must delete the existing one.
+            if (!created && release.assets)
+            {
+                const asset = release.assets.find(element => name === file.name);
+
+                log('Asset already exists, we must delete it.', asset);
+
+                // If the asset already exists, make sure we delete it first.
+                if (asset)
+                {
+                    var assetOptions = {
+                        ...github.context.repo,
+                        asset_id: asset.id
+                    };
+
+                    log('Asset Options', assetOptions);
+    
+                    const result = await api.repos.deleteReleaseAsset(assetOptions);
+
+                    log('Result from delete', result);
+                }
+            }
+            
             log('Uploading:', fileInfo.name);
 
             return api.repos.uploadReleaseAsset({
