@@ -75,10 +75,6 @@ const github = require('@actions/github');
 
                 for (var i = 0; i < releases.data.length; ++i) {
                     var r = releases.data[i];
-                    console.log('R:', r);
-                    console.log('r.tag_name == tag', r.tag_name == tag);
-                    console.log('r.draft == draft', r.draft == draft);
-                    console.log('r.prerelease == prerelease', r.prerelease == prerelease);
 
                     if (r.tag_name == tag && r.draft == draft && r.prerelease == prerelease) {
                         release = r;
@@ -126,7 +122,8 @@ const github = require('@actions/github');
                 name,
                 body,
                 prerelease: prerelease,
-                draft: draft
+                draft: draft,
+                release_id: release.id // Must be part of the parameters.
             };
 
             log('Release Options', releaseOptions);
