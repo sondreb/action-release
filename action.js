@@ -149,7 +149,10 @@ const github = require('@actions/github');
             // If not a new release, we must delete the existing one.
             if (!created && release.assets)
             {
-                const asset = release.assets.find(element => name === file.name);
+                // When release is updated with result from the update call, the clean
+                // JSON structure is turned into:
+                // "assets: [ [Object], [Object], [Object] ],"
+                const asset = release.assets.find(a => a.name === file.name);
 
                 log('Asset already exists, we must delete it.', asset);
 
