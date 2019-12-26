@@ -116,8 +116,7 @@ const github = require('@actions/github');
 
             created = true;
         }
-        else
-        {
+        else {
             var releaseOptions = {
                 ...github.context.repo,
                 ...release,
@@ -147,12 +146,11 @@ const github = require('@actions/github');
             }
 
             // If not a new release, we must delete the existing one.
-            if (!created && release.assets)
-            {
+            if (!created && release.assets) {
                 // When release is updated with result from the update call, the clean
                 // JSON structure is turned into:
                 // "assets: [ [Object], [Object], [Object] ],"
-                
+
 
                 const asset = release.assets.find(a => a.name === fileInfo.name);
 
@@ -169,40 +167,48 @@ const github = require('@actions/github');
                 log('Asset already exists, we must delete it.', asset);
 
                 // If the asset already exists, make sure we delete it first.
-                if (asset)
-                {
+                if (asset) {
                     var assetOptions = {
                         ...github.context.repo,
                         asset_id: asset.id
                     };
 
                     log('Asset Options', assetOptions);
-    
-                    const result = await api.repos.deleteReleaseAsset(assetOptions);
 
-                    log('Result from delete', result);
+                    try {
+                        const result = await api.repos.deleteReleaseAsset(assetOptions);
+                        log('Result from delete', result);
+                    }
+                    catch (err) {
+                        console.error('Failed to delete file', err);
+                    }
                 }
             }
-            
+
             log('Uploading:', fileInfo.name);
 
-            await api.repos.uploadReleaseAsset({
-                url: release.upload_url,
-                headers: {
-                    ['content-type']: fileInfo.mime,
-                    ['content-length']: fileInfo.size
-                },
-                name: fileInfo.name,
-                file: fileInfo.file
-            }).catch(err => {
-                console.error('Failed to upload file:', err);
-            });
+            try {
+                await api.repos.uploadReleaseAsset({
+                    url: release.upload_url,
+                    headers: {
+                        ['content-type']: fileInfo.mime,
+                        ['content-length']: fileInfo.size
+                    },
+                    name: fileInfo.name,
+                    file: fileInfo.file
+                });
+            }
+            catch (error) {
+                console.error('Failed to upload file', error);
+            }
 
             // Recursive go through all files to upload as release assets.
-            upload();
+            await upload();
         }
 
         await upload();
+
+
     } catch (error) {
         console.error(error);
         core.setFailed(error.message);
