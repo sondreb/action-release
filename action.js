@@ -23,9 +23,17 @@ const github = require('@actions/github');
         let release = null;
         let created = false; // Indicate if the release was created, or merely updated.
 
-        function log(name, text) {
-            if (verbose) {
-                console.log(name + ':', text);
+        function info(text, ...params) {
+            log(text, true, ...params);
+        }
+
+        function debug(text, ...params) {
+            log(text, verbose, ...params);
+        }
+
+        function log(text, enabled, ...params) {
+            if (enabled) {
+                console.log(text, ...params);
             }
         }
 
@@ -38,6 +46,8 @@ const github = require('@actions/github');
             }
         }
 
+        info(`🎄 <- That is when I wrote this code.`);
+
         // First let us try to get the release.
         try {
             result = await api.repos.getReleaseByTag({
@@ -45,17 +55,17 @@ const github = require('@actions/github');
                 tag: tag
             });
 
-            log('Tag exists', result);
+            debug(`Release already exists. Do the 🐹 dance.`, result);
 
-            // If this has been published, we'll create a new tag.
+            // If this has been published, we'll create a new release.
             if (draft && !result.data.draft) {
                 release = null;
-                log('Exists', 'The existing release was not draft.');
+                debug(`The existing release was not draft. It must be put in a 🕳️.`);
             }
             else {
                 // We cannot update assets on existing releases, so until a future update, we'll ignore updating
                 // releases that are published.
-                console.log('Draft parameter is set to false and there is an existing release. Skipping any updates to release.');
+                info(`Draft parameter is set to false and there is an existing release. Skipping any updates to release 🛑.`);
                 return;
             }
         }
@@ -72,14 +82,14 @@ const github = require('@actions/github');
                     ...github.context.repo
                 });
 
-                log('releases', releases);
+                debug('Releases', releases);
 
                 for (var i = 0; i < releases.data.length; ++i) {
                     var r = releases.data[i];
 
                     if (r.tag_name == tag && r.draft == draft && r.prerelease == prerelease) {
                         release = r;
-                        log('Release', 'Found existing release based on searching.');
+                        debug('Found existing release based on searching.');
                         break;
                     }
                 }
@@ -103,7 +113,8 @@ const github = require('@actions/github');
                 draft: draft
             };
 
-            log('Release Options (Create)', releaseOptions);
+            debug('Release Options (Create)', releaseOptions);
+            info(`🌻 Creating GitHub release for tag ${tag_name}.`);
 
             const result = await api.repos.createRelease(releaseOptions);
             release = result.data;
@@ -123,7 +134,8 @@ const github = require('@actions/github');
                 release_id: release.id // Must be part of the parameters.
             };
 
-            log('Release Options (Update)', releaseOptions);
+            debug('Release Options (Update)', releaseOptions);
+            info(`Found The 🦞. Updating GitHub release for tag ${tag_name}.`);
 
             const result = await api.repos.updateRelease(releaseOptions);
             release = result.data;
@@ -149,19 +161,19 @@ const github = require('@actions/github');
                         asset_id: asset.id
                     };
 
-                    log('Asset Options (for delete operation)', assetOptions);
+                    debug('Asset Options (for delete operation)', assetOptions);
 
                     try {
                         const result = await api.repos.deleteReleaseAsset(assetOptions);
-                        log('Result from delete', result);
+                        debug('Result from delete', result);
                     }
                     catch (err) {
-                        console.error('Failed to delete file', err);
+                        console.error(`⚠️ Failed to delete file`, err);
                     }
                 }
             }
 
-            log('Uploading:', fileInfo.name);
+            debug('Uploading:', fileInfo.name);
 
             try {
                 await api.repos.uploadReleaseAsset({
@@ -175,7 +187,7 @@ const github = require('@actions/github');
                 });
             }
             catch (error) {
-                console.error('Failed to upload file', error);
+                console.error(`⚠️ Failed to upload file`, error);
             }
 
             // Recursive go through all files to upload as release assets.
@@ -184,6 +196,8 @@ const github = require('@actions/github');
 
         // Start uploading all specified files.
         await upload();
+
+        info('All is norminal 🚀. Execution has ended.')
 
     } catch (error) {
         console.error(error);

@@ -9,7 +9,6 @@ parseChangelog(
     .then(function (result) {
         // changelog object
         console.log(result)
-        //console.log(JSON.stringify(result));
 
     })
     .catch(function (err) {
