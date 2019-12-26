@@ -109,10 +109,29 @@ const github = require('@actions/github');
                 draft: draft
             };
 
-            log('releaseOptions', releaseOptions);
+            log('Release Options', releaseOptions);
 
             const result = await api.repos.createRelease(releaseOptions);
             log('CREATED RELEASE, does this contain .data?', result);
+            release = result.data;
+        }
+        else
+        {
+            var releaseOptions = {
+                ...release,
+                tag_name: tag,
+                target_commitish: 'master',
+                //target_commitish: github.context.sha,
+                name,
+                body,
+                prerelease: prerelease,
+                draft: draft
+            };
+
+            log('Release Options', releaseOptions);
+
+            const result = await api.repos.updateRelease(releaseOptions);
+            log('UPDATED RELEASE, does this contain .data?', result);
             release = result.data;
         }
 
