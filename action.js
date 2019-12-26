@@ -152,7 +152,19 @@ const github = require('@actions/github');
                 // When release is updated with result from the update call, the clean
                 // JSON structure is turned into:
                 // "assets: [ [Object], [Object], [Object] ],"
-                const asset = release.assets.find(a => a.name === file.name);
+                
+
+                const asset = release.assets.find(a => a.name === fileInfo.name);
+
+                // for (var i = 0; i < release.assets.length; ++i) {
+                //     var r = release.assets[i];
+
+                //     if (r.name === file.name) {
+                //         release = r;
+                //         log('Release', 'Found existing release based on searching.');
+                //         break;
+                //     }
+                // }
 
                 log('Asset already exists, we must delete it.', asset);
 
