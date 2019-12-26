@@ -139,18 +139,18 @@ const github = require('@actions/github');
 
         async function upload() {
             var file = files.pop();
-            var fileInfo = getFile(file);
-
+   
             if (!file) {
                 return;
             }
+   
+            var fileInfo = getFile(file);
 
             // If not a new release, we must delete the existing one.
             if (!created && release.assets) {
                 // When release is updated with result from the update call, the clean
                 // JSON structure is turned into:
                 // "assets: [ [Object], [Object], [Object] ],"
-
 
                 const asset = release.assets.find(a => a.name === fileInfo.name);
 
@@ -164,8 +164,6 @@ const github = require('@actions/github');
                 //     }
                 // }
 
-                log('Asset already exists, we must delete it.', asset);
-
                 // If the asset already exists, make sure we delete it first.
                 if (asset) {
                     var assetOptions = {
@@ -173,7 +171,7 @@ const github = require('@actions/github');
                         asset_id: asset.id
                     };
 
-                    log('Asset Options', assetOptions);
+                    log('Asset Options (for delete operation)', assetOptions);
 
                     try {
                         const result = await api.repos.deleteReleaseAsset(assetOptions);
@@ -203,6 +201,7 @@ const github = require('@actions/github');
             }
 
             // Recursive go through all files to upload as release assets.
+            // TODO: Figure out if we should do await here?
             await upload();
         }
 
