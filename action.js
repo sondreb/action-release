@@ -118,6 +118,7 @@ const github = require('@actions/github');
         else
         {
             var releaseOptions = {
+                ...github.context.repo,
                 ...release,
                 tag_name: tag,
                 target_commitish: 'master',
