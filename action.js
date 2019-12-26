@@ -160,7 +160,7 @@ const github = require('@actions/github');
                         asset_id: asset.id
                     };
 
-                    info(`Asset already exists, it must be put in a 🕳️.`);
+                    info(`Asset ${fileInfo.name} already exists, it must be put in a 🕳️.`);
                     debug('Asset Options (for delete operation)', assetOptions);
 
                     try {
@@ -168,12 +168,12 @@ const github = require('@actions/github');
                         debug('Result from delete', result);
                     }
                     catch (err) {
-                        console.error(`⚠️ Failed to delete file`, err);
+                        console.error(`⚠️ Failed to delete file ${fileInfo.name}`, err);
                     }
                 }
             }
 
-            debug('Uploading:', fileInfo.name);
+            info(`🚧 Uploading ${fileInfo.name}.`);
 
             try {
                 await api.repos.uploadReleaseAsset({
