@@ -39,15 +39,15 @@ const github = require('@actions/github');
 
         // First let us try to get the release.
         try {
-            release = await api.repos.getReleaseByTag({
+            result = await api.repos.getReleaseByTag({
                 ...github.context.repo,
                 tag: tag
             });
 
-            log('Tag exists', release);
+            log('Tag exists', result);
 
             // If this has been published, we'll create a new tag.
-            if (draft && !release.data.draft) {
+            if (draft && !result.data.draft) {
                 release = null;
                 log('Exists', 'The existing release was not draft.');
             }
@@ -111,7 +111,9 @@ const github = require('@actions/github');
 
             log('releaseOptions', releaseOptions);
 
-            release = await api.repos.createRelease(releaseOptions);
+            const result = await api.repos.createRelease(releaseOptions);
+            log('CREATED RELEASE, does this contain .data?', result);
+            release = result.data;
         }
 
         function upload() {
@@ -124,7 +126,7 @@ const github = require('@actions/github');
             var fileInfo = getFile(file);
 
             return api.repos.uploadReleaseAsset({
-                url: release.data.upload_url,
+                url: release.upload_url,
                 headers: {
                     ['content-type']: fileInfo.mime,
                     ['content-length']: fileInfo.size
