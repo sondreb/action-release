@@ -20,6 +20,8 @@ const github = require('@actions/github');
         const draft = core.getInput('draft') == 'true';
         const prerelease = core.getInput('prerelease') == 'true';
         const files = core.getInput('files').split(';');
+        
+        const commit = 'master'; // This could likely be a parameter in the future. Get commit like this: github.context.sha
         let release = null;
         let created = false; // Indicate if the release was created, or merely updated.
 
@@ -100,18 +102,19 @@ const github = require('@actions/github');
             }
         }
 
+        // Define the options, these are almost same when creating new and updating existing.
+        var releaseOptions = {
+            ...github.context.repo,
+            tag_name: tag,
+            target_commitish: commit,
+            name,
+            body,
+            prerelease: prerelease,
+            draft: draft
+        };
+
         // Create a release if it doesn't already exists.
         if (!release) {
-            var releaseOptions = {
-                ...github.context.repo,
-                tag_name: tag,
-                target_commitish: 'master', //target_commitish: github.context.sha,
-                name,
-                body,
-                prerelease: prerelease,
-                draft: draft
-            };
-
             debug('Release Options (Create)', releaseOptions);
             info(`🌻 Creating GitHub release for tag "${tag}".`);
 
@@ -120,18 +123,7 @@ const github = require('@actions/github');
             created = true;
         }
         else {
-            var releaseOptions = {
-                ...github.context.repo,
-                ...release,
-                tag_name: tag,
-                target_commitish: 'master',
-                //target_commitish: github.context.sha,
-                name,
-                body,
-                prerelease: prerelease,
-                draft: draft,
-                release_id: release.id // Must be part of the parameters.
-            };
+            releaseOptions.release_id = release.id; // Must be part of the parameters.
 
             debug('Release Options (Update)', releaseOptions);
             info(`Found The 🦞. Updating GitHub release for tag "${tag}".`);
