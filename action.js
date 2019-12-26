@@ -60,11 +60,10 @@ const github = require('@actions/github');
             // If this has been published, we'll create a new release.
             if (draft && !result.data.draft) {
                 release = null;
-                debug(`The existing release was not draft. It must be put in a 🕳️.`);
+                debug(`The existing release was not draft. We can create a brand ✨ new release.`);
             }
             else {
-                // We cannot update assets on existing releases, so until a future update, we'll ignore updating
-                // releases that are published.
+                // We cannot update assets on existing releases, so until a future update, we'll ignore updating releases that are published.
                 info(`Draft parameter is set to false and there is an existing release. Skipping any updates to release 🛑.`);
                 return;
             }
@@ -114,7 +113,7 @@ const github = require('@actions/github');
             };
 
             debug('Release Options (Create)', releaseOptions);
-            info(`🌻 Creating GitHub release for tag ${tag_name}.`);
+            info(`🌻 Creating GitHub release for tag ${tag}.`);
 
             const result = await api.repos.createRelease(releaseOptions);
             release = result.data;
@@ -135,7 +134,7 @@ const github = require('@actions/github');
             };
 
             debug('Release Options (Update)', releaseOptions);
-            info(`Found The 🦞. Updating GitHub release for tag ${tag_name}.`);
+            info(`Found The 🦞. Updating GitHub release for tag ${tag}.`);
 
             const result = await api.repos.updateRelease(releaseOptions);
             release = result.data;
@@ -161,6 +160,7 @@ const github = require('@actions/github');
                         asset_id: asset.id
                     };
 
+                    info(`Asset already exists, it must be put in a 🕳️.`);
                     debug('Asset Options (for delete operation)', assetOptions);
 
                     try {
