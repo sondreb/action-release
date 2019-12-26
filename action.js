@@ -73,10 +73,9 @@ const github = require('@actions/github');
 
                 log('releases', releases);
 
-                for (const r in releases.data) {
-
+                for (var i = 0; i < releases.data.length; ++i) {
+                    var r = releases.data[i];
                     console.log('R:', r);
-
                     console.log('r.tag_name == tag', r.tag_name == tag);
                     console.log('r.draft == draft', r.draft == draft);
                     console.log('r.prerelease == prerelease', r.prerelease == prerelease);
