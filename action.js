@@ -113,7 +113,7 @@ const github = require('@actions/github');
             };
 
             debug('Release Options (Create)', releaseOptions);
-            info(`🌻 Creating GitHub release for tag ${tag}.`);
+            info(`🌻 Creating GitHub release for tag "${tag}".`);
 
             const result = await api.repos.createRelease(releaseOptions);
             release = result.data;
@@ -134,7 +134,7 @@ const github = require('@actions/github');
             };
 
             debug('Release Options (Update)', releaseOptions);
-            info(`Found The 🦞. Updating GitHub release for tag ${tag}.`);
+            info(`Found The 🦞. Updating GitHub release for tag "${tag}".`);
 
             const result = await api.repos.updateRelease(releaseOptions);
             release = result.data;
@@ -160,7 +160,7 @@ const github = require('@actions/github');
                         asset_id: asset.id
                     };
 
-                    info(`Asset ${fileInfo.name} already exists, it must be put in a 🕳️.`);
+                    info(`Asset "${fileInfo.name}" already exists, it must be put in a 🕳️.`);
                     debug('Asset Options (for delete operation)', assetOptions);
 
                     try {
@@ -168,7 +168,7 @@ const github = require('@actions/github');
                         debug('Result from delete', result);
                     }
                     catch (err) {
-                        console.error(`⚠️ Failed to delete file ${fileInfo.name}`, err);
+                        console.error(`⚠️ Failed to delete file "${fileInfo.name}"`, err);
                     }
                 }
             }
@@ -176,7 +176,7 @@ const github = require('@actions/github');
             info(`🚧 Uploading ${fileInfo.name}.`);
 
             try {
-                await api.repos.uploadReleaseAsset({
+                const result = await api.repos.uploadReleaseAsset({
                     url: release.upload_url,
                     headers: {
                         ['content-type']: fileInfo.mime,
@@ -185,13 +185,15 @@ const github = require('@actions/github');
                     name: fileInfo.name,
                     file: fileInfo.file
                 });
+
+                debug('Result from upload', result);
             }
             catch (error) {
                 console.error(`⚠️ Failed to upload file`, error);
             }
 
             // Recursive go through all files to upload as release assets.
-            upload();
+            await upload();
         }
 
         // Start uploading all specified files.
