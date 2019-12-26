@@ -138,7 +138,7 @@ const github = require('@actions/github');
             release = result.data;
         }
 
-        function upload() {
+        async function upload() {
             var file = files.pop();
             var fileInfo = getFile(file);
 
@@ -171,7 +171,7 @@ const github = require('@actions/github');
             
             log('Uploading:', fileInfo.name);
 
-            return api.repos.uploadReleaseAsset({
+            await api.repos.uploadReleaseAsset({
                 url: release.upload_url,
                 headers: {
                     ['content-type']: fileInfo.mime,
@@ -179,14 +179,15 @@ const github = require('@actions/github');
                 },
                 name: fileInfo.name,
                 file: fileInfo.file
-            }).then(() => {
-                upload();
             }).catch(err => {
                 console.error('Failed to upload file:', err);
             });
+
+            // Recursive go through all files to upload as release assets.
+            upload();
         }
 
-        upload();
+        await upload();
     } catch (error) {
         console.error(error);
         core.setFailed(error.message);
