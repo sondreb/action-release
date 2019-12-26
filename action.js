@@ -21,6 +21,7 @@ const github = require('@actions/github');
         const prerelease = core.getInput('prerelease') == 'true';
         const files = core.getInput('files').split(';');
         let release = null;
+        let created = false; // Indicate if the release was created, or merely updated.
 
         function log(name, text) {
             if (verbose) {
@@ -84,36 +85,28 @@ const github = require('@actions/github');
                 }
             }
             catch (error) {
-                console.error('Failed to get releases', error);
-
                 if (error.name != 'HttpError' || error.status != 404) {
                     throw error;
                 }
             }
         }
 
-        // Indicate if the release was created, or merely updated.
-        let created = false;
-
         // Create a release if it doesn't already exists.
         if (!release) {
             var releaseOptions = {
                 ...github.context.repo,
                 tag_name: tag,
-                target_commitish: 'master',
-                //target_commitish: github.context.sha,
+                target_commitish: 'master', //target_commitish: github.context.sha,
                 name,
                 body,
                 prerelease: prerelease,
                 draft: draft
             };
 
-            log('Release Options', releaseOptions);
+            log('Release Options (Create)', releaseOptions);
 
             const result = await api.repos.createRelease(releaseOptions);
-            log('CREATED RELEASE, does this contain .data?', result);
             release = result.data;
-
             created = true;
         }
         else {
@@ -130,39 +123,24 @@ const github = require('@actions/github');
                 release_id: release.id // Must be part of the parameters.
             };
 
-            log('Release Options', releaseOptions);
+            log('Release Options (Update)', releaseOptions);
 
             const result = await api.repos.updateRelease(releaseOptions);
-            log('UPDATED RELEASE, does this contain .data?', result);
             release = result.data;
         }
 
         async function upload() {
             var file = files.pop();
-   
+
             if (!file) {
                 return;
             }
-   
+
             var fileInfo = getFile(file);
 
             // If not a new release, we must delete the existing one.
             if (!created && release.assets) {
-                // When release is updated with result from the update call, the clean
-                // JSON structure is turned into:
-                // "assets: [ [Object], [Object], [Object] ],"
-
                 const asset = release.assets.find(a => a.name === fileInfo.name);
-
-                // for (var i = 0; i < release.assets.length; ++i) {
-                //     var r = release.assets[i];
-
-                //     if (r.name === file.name) {
-                //         release = r;
-                //         log('Release', 'Found existing release based on searching.');
-                //         break;
-                //     }
-                // }
 
                 // If the asset already exists, make sure we delete it first.
                 if (asset) {
@@ -201,12 +179,11 @@ const github = require('@actions/github');
             }
 
             // Recursive go through all files to upload as release assets.
-            // TODO: Figure out if we should do await here?
-            await upload();
+            upload();
         }
 
+        // Start uploading all specified files.
         await upload();
-
 
     } catch (error) {
         console.error(error);
