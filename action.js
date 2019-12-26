@@ -124,6 +124,7 @@ const github = require('@actions/github');
             }
 
             var fileInfo = getFile(file);
+            log('Uploading:', fileInfo.name);
 
             return api.repos.uploadReleaseAsset({
                 url: release.upload_url,
@@ -135,6 +136,8 @@ const github = require('@actions/github');
                 file: fileInfo.file
             }).then(() => {
                 upload();
+            }).catch(err => {
+                console.error('Failed to upload file:', err);
             });
         }
 
