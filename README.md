@@ -21,9 +21,10 @@ Here is an example on how to use this Action:
       uses: sondreb/action-release@master
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        artifacts: "action.js"
+        files: "action.js;README.md"
         draft: true
         prerelease: true
+        body: 'This is a pre-release'
         name: "Draft Release"
         tag: v0.0.1
 ```
@@ -31,6 +32,8 @@ Here is an example on how to use this Action:
 ### Notes
 
 The "prerelease" parameter is not used to allow you to update a published prerelease, but simply mark it by default with prerelease.
+
+This is built as a quick and dirty proof-of-concept during 🎅🎄 and is likely ridled with bugs and problems. Use at your own discretion.
 
 ## License
 
