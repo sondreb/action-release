@@ -14,11 +14,11 @@ jobs:
         os: [ windows-latest, ubuntu-latest, macos-latest ]
         include:
           - os: windows-latest
-            zip: "myzipcmd"
+            zip: "myzipcmd ${{ env.MYVAR }}"
           - os: ubuntu-latest
-            zip: "tar"
+            zip: "tar  ${{ env.MYVAR }}"
           - os: macos-latest
-            zip: "zip"
+            zip: zip  ${{ env.MYVAR }}
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
@@ -63,6 +63,9 @@ jobs:
     - name: Version
       run: |
         echo "::set-env name=VERSION::$(npm run version --silent)"
+        echo "::set-env name=MYVAR::HelloWorld"
+
+
 
     # - name: Changelog
     #   id: changelog
