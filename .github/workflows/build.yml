@@ -11,14 +11,9 @@ jobs:
 
     strategy:
       matrix:
-        os: [ windows-latest, ubuntu-latest, macos-latest ]
-        include:
-          - os: windows-latest
-            zip: "myzipcmd ${{ env.MYVAR }}"
-          - os: ubuntu-latest
-            zip: "tar  ${{ env.MYVAR }}"
-          - os: macos-latest
-            zip: zip  ${{ env.MYVAR }}
+        #os: [ windows-latest, ubuntu-latest, macos-latest ]
+        os: [ ubuntu-latest ]
+        node_version: [12.x]
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
@@ -27,30 +22,6 @@ jobs:
       PROJECT_NAME: 'action-release'
 
     steps:
-    - name: Dump GitHub context
-      env:
-        GITHUB_CONTEXT: ${{ toJson(github) }}
-      run: echo "$GITHUB_CONTEXT"
-    - name: Dump job context
-      env:
-        JOB_CONTEXT: ${{ toJson(job) }}
-      run: echo "$JOB_CONTEXT"
-    - name: Dump steps context
-      env:
-        STEPS_CONTEXT: ${{ toJson(steps) }}
-      run: echo "$STEPS_CONTEXT"
-    - name: Dump runner context
-      env:
-        RUNNER_CONTEXT: ${{ toJson(runner) }}
-      run: echo "$RUNNER_CONTEXT"
-    - name: Dump strategy context
-      env:
-        STRATEGY_CONTEXT: ${{ toJson(strategy) }}
-      run: echo "$STRATEGY_CONTEXT"
-    - name: Dump matrix context
-      env:
-        MATRIX_CONTEXT: ${{ toJson(matrix) }}
-      run: echo "$MATRIX_CONTEXT"
 
     - uses: actions/checkout@v1
       name: Checkout
@@ -63,9 +34,6 @@ jobs:
     - name: Version
       run: |
         echo "::set-env name=VERSION::$(npm run version --silent)"
-        echo "::set-env name=MYVAR::HelloWorld"
-
-
 
     # - name: Changelog
     #   id: changelog
