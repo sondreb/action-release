@@ -22,6 +22,7 @@ Here is an example on how to use this Action:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         files: "action.js;README.md"
+        folder: "${{github.workspace}}/package/"
         draft: true
         prerelease: true
         body: 'This is a pre-release'
@@ -34,6 +35,12 @@ Here is an example on how to use this Action:
 The "prerelease" parameter is not used to allow you to update a published prerelease, but simply mark it by default with prerelease.
 
 This is built as a quick and dirty proof-of-concept during 🎅🎄 and is likely ridled with bugs and problems. Use at your own discretion.
+
+## Releases
+
+0.0.3
+
+- Adds support for folders.
 
 ## License
 

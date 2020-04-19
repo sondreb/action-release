@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - feature/*
 
 jobs:
   
@@ -45,7 +46,8 @@ jobs:
       with:
         verbose: false
         token: ${{ secrets.GITHUB_TOKEN }}
-        files: "action.js;README.md"
+        #files: "action.js;README.md"
+        folder: "./test/"
         draft: true
         prerelease: true
         body: 'A little test - some updated text!'

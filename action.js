@@ -19,8 +19,24 @@ const github = require('@actions/github');
         const verbose = core.getInput('verbose') == 'true'; // input is always string, not boolean.
         const draft = core.getInput('draft') == 'true';
         const prerelease = core.getInput('prerelease') == 'true';
-        const files = core.getInput('files').split(';');
-        
+        let files = null;
+
+        if (core.getInput('folder'))
+        {
+            const folder = core.getInput('folder');
+            log('Reading files in folder:' + folder);
+
+            files = fs.readdirSync(folder, {withFileTypes: true})
+            .filter(item => !item.isDirectory())
+            .map(item => path.join(folder, item.name))
+
+            log('Found files: ', files);
+        }
+        else
+        {
+            files = core.getInput('files').split(';');
+        }
+
         const commit = 'master'; // This could likely be a parameter in the future. Get commit like this: github.context.sha
         let release = null;
         let created = false; // Indicate if the release was created, or merely updated.
@@ -40,6 +56,9 @@ const github = require('@actions/github');
         }
 
         function getFile(filePath) {
+
+            log('getFile: ' + filePath);
+
             return {
                 name: path.basename(filePath),
                 mime: mime.getType(filePath) || 'application/octet-stream',
