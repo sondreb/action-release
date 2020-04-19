@@ -42,7 +42,7 @@ jobs:
     #     npm run changelog
 
     - name: Release
-      uses: sondreb/action-release@feature/folder-support
+      uses: sondreb/action-release@master
       with:
         verbose: false
         token: ${{ secrets.GITHUB_TOKEN }}
