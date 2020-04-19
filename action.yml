@@ -21,7 +21,10 @@ inputs:
   prerelease:
     default: false
   files:
-    required: true
+    required: false
+    default: ''
+  folder:
+    required: false
     default: ''
   body:
     default: ''

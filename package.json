@@ -1,6 +1,6 @@
 {
     "name": "action-release",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "private": true,
     "description": "GitHub Action: GitHub Release Action",
     "main": "action.js",
