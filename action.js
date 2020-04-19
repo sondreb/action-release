@@ -24,10 +24,13 @@ const github = require('@actions/github');
         if (core.getInput('folder'))
         {
             const folder = core.getInput('folder');
+            log('Reading files in folder:' + folder);
 
             files = fs.readdirSync(folder, {withFileTypes: true})
             .filter(item => !item.isDirectory())
             .map(item => path.join(folder, item.name))
+
+            log('Found files: ', files);
         }
         else
         {
@@ -53,6 +56,9 @@ const github = require('@actions/github');
         }
 
         function getFile(filePath) {
+
+            log('getFile: ' + filePath);
+
             return {
                 name: path.basename(filePath),
                 mime: mime.getType(filePath) || 'application/octet-stream',
