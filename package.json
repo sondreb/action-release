@@ -21,7 +21,7 @@
     "author": "Sondre Bjellås",
     "license": "MIT",
     "dependencies": {
-        "@actions/core": "^1.2.0",
+        "@actions/core": "^1.2.6",
         "@actions/github": "^2.0.0",
         "changelog-parser": "^2.8.0"
     },
