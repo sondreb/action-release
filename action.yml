@@ -31,6 +31,9 @@ inputs:
     default: 'master'
   body:
     default: ''
+  verbose:
+    required: false
+    default: 'false'
 runs:
   using: node12
   main: action.js

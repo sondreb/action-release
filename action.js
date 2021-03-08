@@ -158,11 +158,13 @@ const github = require('@actions/github');
                 return;
             }
 
-            var fileInfo = getFile(file);
+            // var fileInfo = getFile(file);
+
+            const fileName = path.basename(file);
 
             // If not a new release, we must delete the existing one.
             if (!created && release.assets) {
-                const asset = release.assets.find(a => a.name === fileInfo.name);
+                const asset = release.assets.find(a => a.name === fileName);
 
                 // If the asset already exists, make sure we delete it first.
                 if (asset) {
@@ -171,7 +173,7 @@ const github = require('@actions/github');
                         asset_id: asset.id
                     };
 
-                    info(`Asset "${fileInfo.name}" already exists, it must be put in a 🕳️.`);
+                    info(`Asset "${fileName}" already exists, it must be put in a 🕳️.`);
                     debug('Asset Options (for delete operation)', assetOptions);
 
                     try {
@@ -179,22 +181,23 @@ const github = require('@actions/github');
                         debug('Result from delete', result);
                     }
                     catch (err) {
-                        console.error(`⚠️ Failed to delete file "${fileInfo.name}"`, err);
+                        console.error(`⚠️ Failed to delete file "${fileName}"`, err);
                     }
                 }
             }
 
-            info(`🚧 Uploading ${fileInfo.name}.`);
+            info(`🚧 Uploading ${fileName}.`);
 
             try {
                 const result = await api.repos.uploadReleaseAsset({
                     url: release.upload_url,
-                    headers: {
-                        ['content-type']: fileInfo.mime,
-                        ['content-length']: fileInfo.size
-                    },
-                    name: fileInfo.name,
-                    file: fileInfo.file
+                    // headers: {
+                    //     ['content-type']: fileInfo.mime,
+                    //     ['content-length']: fileInfo.size
+                    // },
+                    // name: fileInfo.name,
+                    name: fileName,
+                    data: await fs.readFile(file)
                 });
 
                 debug('Result from upload', result);
