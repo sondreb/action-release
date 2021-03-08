@@ -197,7 +197,7 @@ const github = require('@actions/github');
                     // },
                     // name: fileInfo.name,
                     name: fileName,
-                    data: await fs.readFile(file)
+                    data: fs.readFileSync(file)
                 });
 
                 debug('Result from upload', result);
