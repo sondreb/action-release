@@ -8,11 +8,11 @@ const fs = require('fs');
 const path = require('path');
 const mime = require('mime');
 const core = require('@actions/core');
-const { GitHub } = require('@actions/github');
+const github = require('@actions/github');
 
 (async () => {
     try {
-        const api = new GitHub(core.getInput('token'));
+        const api = github.getOctokit(core.getInput('token'))
         const tag = core.getInput('tag');
         const name = core.getInput('name');
         const body = core.getInput('body');
