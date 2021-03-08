@@ -26,6 +26,9 @@ inputs:
   folder:
     required: false
     default: ''
+  commit:
+    required: false
+    default: 'master'
   body:
     default: ''
 runs:

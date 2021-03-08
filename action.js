@@ -12,9 +12,10 @@ const github = require('@actions/github');
 
 (async () => {
     try {
-        const api = github.getOctokit(core.getInput('token'))
+        const api = github.getOctokit(core.getInput('token'));
         const tag = core.getInput('tag');
         const name = core.getInput('name');
+        const commit = core.getInput('commit');
         const body = core.getInput('body');
         const verbose = core.getInput('verbose') == 'true'; // input is always string, not boolean.
         const draft = core.getInput('draft') == 'true';
@@ -37,7 +38,6 @@ const github = require('@actions/github');
             files = core.getInput('files').split(';');
         }
 
-        const commit = 'master'; // This could likely be a parameter in the future. Get commit like this: github.context.sha
         let release = null;
         let created = false; // Indicate if the release was created, or merely updated.
 
