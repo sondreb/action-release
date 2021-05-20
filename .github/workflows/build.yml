@@ -3,7 +3,7 @@ name: Build
 on: 
   push:
     branches:
-      - master
+      - main
       - feature/*
 
 jobs:
@@ -43,7 +43,7 @@ jobs:
     #     npm run changelog
 
     - name: Release
-      uses: sondreb/action-release@master
+      uses: sondreb/action-release@main
       with:
         verbose: true
         token: ${{ secrets.GITHUB_TOKEN }}
