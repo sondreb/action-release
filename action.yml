@@ -28,7 +28,7 @@ inputs:
     default: ''
   commit:
     required: false
-    default: 'master'
+    default: 'main'
   body:
     default: ''
   verbose:
