@@ -42,6 +42,10 @@ This is built as a quick and dirty proof-of-concept during 🎅🎄 and is likel
 
 - Adds support for folders.
 
+0.0.5
+
+- Update dependencies and cleanup of repo.
+
 ## License
 
 [MIT](LICENSE)

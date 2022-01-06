@@ -1,6 +1,6 @@
 {
     "name": "action-release",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "private": true,
     "description": "GitHub Action: GitHub Release Action",
     "main": "action.js",
@@ -21,11 +21,11 @@
     "author": "Sondre Bjellås",
     "license": "MIT",
     "dependencies": {
-        "@actions/core": "^1.2.6",
-        "@actions/github": "^4.0.0",
+        "@actions/core": "^1.6.0",
+        "@actions/github": "^5.0.0",
         "changelog-parser": "^2.8.0"
     },
     "devDependencies": {
-        "conventional-changelog-cli": "^2.1.1"
+        "conventional-changelog-cli": "^2.2.2"
     }
 }
