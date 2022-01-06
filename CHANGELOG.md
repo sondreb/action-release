@@ -1,11 +1,14 @@
-## <small>0.0.4 (2021-03-08)</small>
+## <small>0.0.5 (2022-01-06)</small>
 
-* Update packages to latest versions ([fabdcb8](https://github.com/sondreb/action-release/commit/fabdcb8))
+* Update dependencies and cleanup of repo ([b09258c](https://github.com/sondreb/action-release/commit/b09258c))
 
-## <small>0.0.3 (2019)</small>
+
+
+## <small>0.0.1 (2021-03-08)</small>
 
 * A basic release action for GitHub Actions ([97b2402](https://github.com/sondreb/action-release/commit/97b2402))
 * Add CHANGELOG.md ([acab2ba](https://github.com/sondreb/action-release/commit/acab2ba))
+* Attempt to change how to upload ([dee862f](https://github.com/sondreb/action-release/commit/dee862f))
 * Bump version ([e7bf3c9](https://github.com/sondreb/action-release/commit/e7bf3c9))
 * Change the file syntax. ([4316abe](https://github.com/sondreb/action-release/commit/4316abe))
 * Change to draft ([cdae2c3](https://github.com/sondreb/action-release/commit/cdae2c3))
@@ -17,8 +20,11 @@
 * Fix async issue on upload ([d834755](https://github.com/sondreb/action-release/commit/d834755))
 * Fix bug with invalid variable name ([2c2f269](https://github.com/sondreb/action-release/commit/2c2f269))
 * Fix for releases.data ([5579c71](https://github.com/sondreb/action-release/commit/5579c71))
+* Fix issue with release ([65c2391](https://github.com/sondreb/action-release/commit/65c2391))
 * Improve logging ([af6624f](https://github.com/sondreb/action-release/commit/af6624f))
 * Initial commit ([2de15ef](https://github.com/sondreb/action-release/commit/2de15ef))
+* Make the commit configurable to support both "master" and "main" repos ([98d0f45](https://github.com/sondreb/action-release/commit/98d0f45))
+* Read file sync ([3636b9d](https://github.com/sondreb/action-release/commit/3636b9d))
 * Update action.js ([77fc908](https://github.com/sondreb/action-release/commit/77fc908))
 * Update action.js ([40cb83a](https://github.com/sondreb/action-release/commit/40cb83a))
 * Update action.js ([9f89e61](https://github.com/sondreb/action-release/commit/9f89e61))
@@ -61,8 +67,12 @@
 * Update build.yml ([3c5f245](https://github.com/sondreb/action-release/commit/3c5f245))
 * Update build.yml ([706d4c4](https://github.com/sondreb/action-release/commit/706d4c4))
 * Update build.yml ([ef27f78](https://github.com/sondreb/action-release/commit/ef27f78))
+* Update packages to latest versions ([fabdcb8](https://github.com/sondreb/action-release/commit/fabdcb8))
 * Update README.md ([afbde2c](https://github.com/sondreb/action-release/commit/afbde2c))
 * Update README.md ([ff7f37f](https://github.com/sondreb/action-release/commit/ff7f37f))
+* Update the changelog ([b5b0cb2](https://github.com/sondreb/action-release/commit/b5b0cb2))
+* Update the import for GitHub API ([ee1f621](https://github.com/sondreb/action-release/commit/ee1f621))
+* Update with new syntax ([b061116](https://github.com/sondreb/action-release/commit/b061116))
 * Why are tags not connected to draft releases?? ([4142398](https://github.com/sondreb/action-release/commit/4142398))
 * Wrap error ([2ba2608](https://github.com/sondreb/action-release/commit/2ba2608))
 
