@@ -131,9 +131,9 @@ const github = require('@actions/github');
             draft: draft
         };
 
-        if (commit) {
-            releaseOptions.target_commitish = commit;
-        }
+        // if (commit) {
+        //     releaseOptions.target_commitish = commit;
+        // }
 
         // Create a release if it doesn't already exists.
         if (!release) {
