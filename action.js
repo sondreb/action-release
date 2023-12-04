@@ -1,6 +1,6 @@
 require('child_process')
     .execSync(
-        'npm install @actions/core @actions/github conventional-changelog-cli mime',
+        'npm install @actions/core @actions/github conventional-changelog-cli mime@3.0.0',
         { cwd: __dirname }
     );
 
